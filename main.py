@@ -102,7 +102,7 @@ class Player(pygame.sprite.Sprite):
             self.prev_y = self.rect.y
 
     def enemy_collision(self):
-        global game_active
+        global game_active, player_stats
         enemy_hit = pygame.sprite.spritecollide(self, self.enemy1_list, False)
         bullet_hit = pygame.sprite.spritecollide(self, self.enemy_bullets, False)
         if enemy_hit and self.immortal == 0:
@@ -114,6 +114,8 @@ class Player(pygame.sprite.Sprite):
             self.health -= enemy2_stats[1]
             self.immortal = 120
         if self.health <= 0:
+            player_stats = [self.bullet_speed, self.bullet_size, self.reload_speed, self.health, self.speed,
+                            self.damage, self.kills]
             pygame.mixer.stop()
             end.play(loops=-1)
             game_active = False
@@ -666,7 +668,10 @@ pause_rect_1 = pause_text_1.get_rect(center=(400,340))
 
 #game over screen
 dead_text = cool_font.render('Game Over',True,(255, 30, 30))
-dead_rect = dead_text.get_rect(center=(400,300))
+dead_rect = dead_text.get_rect(center=(400,200))
+
+kill_text = normal_font.render(f'Monsters Killed: {player_stats[6]}', False, (255,30,30))
+levels_text = normal_font.render(f'Rooms Cleared: {level-1}', False, (255,30,30))
 
 
 controls = ['    - Use WASD to move',
@@ -800,7 +805,13 @@ while True:
             screen.fill((40,40,40))
             pygame.draw.rect(screen, '#f5a442', dead_rect)
             pygame.draw.rect(screen, '#f5a442', dead_rect, 10)
+            kill_text = normal_font.render(f'Monsters Killed [ {player_stats[6]} ]', False, (255, 30, 30))
+            kill_rect = kill_text.get_rect(center=(400,350))
+            levels_text = normal_font.render(f'Rooms Cleared [ {level - 1} ]', False, (255, 30, 30))
+            levels_rect = levels_text.get_rect(center=(400,390))
             screen.blit(dead_text,dead_rect)
+            screen.blit(kill_text,kill_rect)
+            screen.blit(levels_text,levels_rect)
     # angle += 1
     # test_rotated = pygame.transform.rotozoom(test,angle,1)
     # test_rect = test_rotated.get_rect(center=(400,300))
