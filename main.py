@@ -115,7 +115,7 @@ class Player(pygame.sprite.Sprite):
             self.immortal = 120
         if self.health <= 0:
             pygame.mixer.stop()
-            end.play()
+            end.play(loops=-1)
             game_active = False
         if self.immortal != 0:
             self.immortal -= 1
@@ -709,7 +709,7 @@ while True:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             pygame.mixer.stop()
-            active.play()
+            active.play(loops=-1)
             screen_num = 1
             game_active = True
         elif keys[pygame.K_h]:
